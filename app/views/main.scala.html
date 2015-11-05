@@ -1,0 +1,61 @@
+@(list: scala.collection.immutable.List[String])
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <title>title</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+        <script>
+            function getDataAjax(value){
+                 console.log("getDataAjax func " + value);
+
+                 $.ajax({
+                     type : 'GET',
+                     url : "/getData?value=" + value ,
+                     success : function(data) {
+                        console.log("inside getDataAjax func data="+data);
+
+
+                     },
+                     error : function(data) { alert("something wrong")  }
+                 });
+            }
+
+        </script>
+    </head>
+    <body>
+        <form onclick="getDataFromSelect()" name="form">
+            <select name="genre" multiple>
+                @for(e <-list) {
+                        <option value="@e">@e</option>
+
+                })
+
+            </select>
+        </form>
+
+        <script>
+        function getDataFromSelect(){
+            var form = document.forms[0];
+            var select = form.elements.genre;
+            var value;
+            for (var i = 0; i < select.options.length; i++) {
+              var option = select.options[i];
+              if(option.selected) {
+                value =  option.value;
+
+              }
+            }
+            getDataAjax(value)
+
+}
+</script>
+
+        <a onclick="getDataAjax()" >Ajax</a>
+
+
+    </body>
+</html>

@@ -1,0 +1,84 @@
+CREATE TABLE unit_measures
+(
+  id_unit_measure serial NOT NULL,
+  name_unit_measure character varying(40),
+  CONSTRAINT unit_measures_pkey PRIMARY KEY (id_unit_measure)
+)
+;
+
+CREATE TABLE hardware
+(
+  id_hardware serial NOT NULL,
+  name_hardware character varying(200),
+  model_hardware character varying(200),
+  price double precision,
+  "isComplex" boolean,
+  CONSTRAINT hardware_pkey PRIMARY KEY (id_hardware)
+)
+;
+
+CREATE TABLE parameters
+(
+  id_parameter serial NOT NULL,
+  name_parameter character varying(200),
+  fk_unit_measure integer,
+  CONSTRAINT parameters_pkey PRIMARY KEY (id_parameter),
+  CONSTRAINT parameters_fk_unit_measure_fkey FOREIGN KEY (fk_unit_measure)
+  REFERENCES unit_measures (id_unit_measure) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+;
+
+CREATE TABLE hardware_parameters
+(
+  fk_id_hardware integer NOT NULL,
+  fk_id_parameter integer NOT NULL,
+  value character varying(200),
+  CONSTRAINT hardware_parameters_pkey PRIMARY KEY (fk_id_hardware, fk_id_parameter),
+  CONSTRAINT hardware_parameters_fk_id_hardware_fkey FOREIGN KEY (fk_id_hardware)
+  REFERENCES hardware (id_hardware) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT hardware_parameters_fk_id_parameter_fkey FOREIGN KEY (fk_id_parameter)
+  REFERENCES parameters (id_parameter) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+;
+
+CREATE TABLE composite_complex_set
+(
+  fk_id_complex_hardware integer NOT NULL,
+  fk_id_hardware integer NOT NULL,
+  amount_elements integer,
+  CONSTRAINT composite_complex_set_pkey PRIMARY KEY (fk_id_complex_hardware, fk_id_hardware),
+  CONSTRAINT composite_complex_set_fk_id_complex_hardware_fkey FOREIGN KEY (fk_id_complex_hardware)
+  REFERENCES hardware (id_hardware) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT composite_complex_set_fk_id_hardware_fkey FOREIGN KEY (fk_id_hardware)
+  REFERENCES hardware (id_hardware) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+;
+
+CREATE TABLE Product
+(
+  id_product serial NOT NULL,
+  name_product character varying(200),
+  model_product character varying(200),
+  CONSTRAINT "Product_pkey" PRIMARY KEY (id_product)
+)
+;
+
+CREATE TABLE product_composition
+(
+  fk_id_product integer NOT NULL,
+  fk_id_hardware integer NOT NULL,
+  amount_elements integer,
+  CONSTRAINT product_composition_pkey PRIMARY KEY (fk_id_product, fk_id_hardware),
+  CONSTRAINT product_composition_fk_id_hardware_fkey FOREIGN KEY (fk_id_hardware)
+  REFERENCES hardware (id_hardware) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT product_composition_fk_id_product_fkey FOREIGN KEY (fk_id_product)
+  REFERENCES Product (id_product) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+;
