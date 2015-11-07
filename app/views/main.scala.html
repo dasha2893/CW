@@ -17,17 +17,21 @@
                $("#otherContent").remove();
             }
 
+
         function getPrice(product,model){
                  console.log("model="+model);
                  var quantityProduct = document.getElementById("quantity").value;
+                                  console.log("quantityProduct="+quantityProduct);
+
                  $.ajax({
                     type: 'GET',
                     url: "/getPrice?product=" + product +"&model=" + model + "&quantityProduct=" + quantityProduct,
                     success: function(data){
                     console.log("data="+data);
-                    var text ="Стоимость: " + data + " руб.";
-                    $("#text").html(text);                    },
-                    error : function(data) { alert("something wrong")  }
+                    var text ="Изделие(я) собрано(ы).  Стоимость: " + data + " руб.";
+                    $("#textPrice").html(text);
+                     },
+                    error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
                  });
 
         }
@@ -62,23 +66,35 @@
 </script>
     </head>
         <body>
-            <form name="form">
-                @for((product, models) <-products) {
-                    <table>
-                        <tr><th>@product</th></tr>
-                    <tr><td>
-                    <select id="@product"  name="@product" multiple>
-                    @for(model <-models) {
-                        <option onclick="getDataAjax(@{"'"+product+"','"+model+"'"})" value="@model"> @model </option>
+            <div id="header"><div id="textHeader">Сборка изделий</div></div>
+            <div id="menu">
+                <form name="form">
+                    <div id="textMenu"> Изделия</div>
+                    @for((product, models) <-products) {
+                        <table>
+                            <tr><th><div id="text">@product</div></th></tr>
+                        <tr><td>
+                        <select class="new-select-style-wpandyou select" id="@product"  name="@product">
+                        @for(model <-models) {
+                            <option onclick="getDataAjax(@{"'"+product+"','"+model+"'"})" value="@model"> @model </option>
 
+                        }
+                        </select></td></tr></table><br/><br/>
                     }
-                    </select></td></tr></table><br/><br/>
-                }
-            </form>
-
-            <div id="result">
-
+                </form>
             </div>
-            <div id="text"></div>
+            <div id="content">
+                <div id="result" style="margin-left: 8%"></div>
+                <div id="textPrice" style="margin-left: 8%;
+                                            color: #ff1d15;
+                                            line-height: 1.3;
+                                            margin-top: 2%;
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                            font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">
+
+                </div>
+            </div>
+
         </body>
 </html>

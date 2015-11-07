@@ -1,0 +1,65 @@
+html,body {
+    background: #7e7c85;
+    height: 100%;
+    width: 100%;
+    margin: 0; /* убираем наружные отступы */
+    padding: 0; /* убираем внутренние отступы */
+
+}
+
+#textHeader{
+    clear: both;
+    text-align: center;
+    color: #eae5e5;
+    line-height: 1.3;
+    margin-top: 1%;
+    font-size: 24px;
+    font-weight: bolder;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+
+}
+
+#text{
+    clear: both;
+    text-align: center;
+    color: rgba(55, 53, 58, 0.94);
+    line-height: 1.3;
+    margin-top: 4%;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+
+}
+
+#textMenu{
+    clear: both;
+    text-align: center;
+    color: #ff1d15;
+    line-height: 1.3;
+    margin-top: 2%;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+
+}
+
+#header {
+    background: #7e7c85;
+    height: 5%;
+    width: 100%;
+}
+#menu {
+    background: #eae5e5;
+    float: left;
+    width: 15%;
+    height: 40%;
+}
+
+#content {
+    width: 85%;
+    float: right;
+    background: #eae5e5;
+    height: 40%;
+
+}
+
