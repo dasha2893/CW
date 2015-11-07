@@ -8,9 +8,9 @@ scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
   jdbc ,
-  anorm ,
   cache ,
   ws ,
+  "com.typesafe.play" % "anorm_2.11" % "2.4.0-M3",
   "postgresql" % "postgresql" % "9.1-901.jdbc4")
 
 

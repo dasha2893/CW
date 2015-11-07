@@ -1,4 +1,5 @@
-@(list: scala.collection.immutable.List[String])
+@(products: scala.collection.immutable.Map[String,scala.collection.immutable.List[String]])
+
 
 <!DOCTYPE html>
 
@@ -8,54 +9,76 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/jquery.js")" type="text/javascript"></script>
+
+
         <script>
-            function getDataAjax(value){
-                 console.log("getDataAjax func " + value);
+        function removeContent(){
+               $("#otherContent").remove();
+            }
+
+        function getPrice(product,model){
+                 console.log("model="+model);
+                 var quantityProduct = document.getElementById("quantity").value;
+                 $.ajax({
+                    type: 'GET',
+                    url: "/getPrice?product=" + product +"&model=" + model + "&quantityProduct=" + quantityProduct,
+                    success: function(data){
+                    console.log("data="+data);
+                    var text ="Стоимость: " + data + " руб.";
+                    $("#text").html(text);                    },
+                    error : function(data) { alert("something wrong")  }
+                 });
+
+        }
+
+        function getDataAjax(product,model){
+                 console.log("model=" + model);
+                 console.log("product=" + product);
 
                  $.ajax({
                      type : 'GET',
-                     url : "/getData?value=" + value ,
+                     url : "/getData?product=" + product +"&model=" + model,
                      success : function(data) {
-                        console.log("inside getDataAjax func data="+data);
+                          removeContent();
+                          var div = document.createElement('div');
+                          div.type = 'text';
+                          div.innerHTML = data;
+                          div.display = 'none';
+                          document.getElementById("result").appendChild(div);
 
-
-                     },
+                         },
                      error : function(data) { alert("something wrong")  }
                  });
             }
 
-        </script>
-    </head>
-    <body>
-        <form onclick="getDataFromSelect()" name="form">
-            <select name="genre" multiple>
-                @for(e <-list) {
-                        <option value="@e">@e</option>
+        function getDataFromSelect(product,model){
+            console.log(product);
+            console.log(model);
+            getDataAjax(product,model)
+        }
 
-                })
 
-            </select>
-        </form>
-
-        <script>
-        function getDataFromSelect(){
-            var form = document.forms[0];
-            var select = form.elements.genre;
-            var value;
-            for (var i = 0; i < select.options.length; i++) {
-              var option = select.options[i];
-              if(option.selected) {
-                value =  option.value;
-
-              }
-            }
-            getDataAjax(value)
-
-}
 </script>
+    </head>
+        <body>
+            <form name="form">
+                @for((product, models) <-products) {
+                    <table>
+                        <tr><th>@product</th></tr>
+                    <tr><td>
+                    <select id="@product"  name="@product" multiple>
+                    @for(model <-models) {
+                        <option onclick="getDataAjax(@{"'"+product+"','"+model+"'"})" value="@model"> @model </option>
 
-        <a onclick="getDataAjax()" >Ajax</a>
+                    }
+                    </select></td></tr></table><br/><br/>
+                }
+            </form>
 
+            <div id="result">
 
-    </body>
+            </div>
+            <div id="text"></div>
+        </body>
 </html>
