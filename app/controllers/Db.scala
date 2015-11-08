@@ -69,8 +69,11 @@ class Db {
   }
 
   def getProductParameters(idProduct:Int) = DB.withConnection { implicit c =>
-    val tuple=SQL(s"SELECT * from build_product_parameters($idProduct)")().map(row => (row[String](1),row[String](2),row[String](3),row[String](4))).toList
-    tuple
+    println("idProduct = " + idProduct)
+    val list = SQL(s"SELECT * from build_product_parameters('$idProduct')")().map(row => (row[String](1), row[String](2), row[String](3), row[String](4))).toList
+    list.foreach(println)
+    list
+
   }
 
 

@@ -63,3 +63,17 @@ html,body {
 
 }
 
+#content2 {
+    width: 40%;
+    float: left;
+    height: 40%;
+
+}
+
+#content3 {
+    width: 45%;
+    float: right;
+    height: 40%;
+
+}
+

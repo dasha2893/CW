@@ -21,18 +21,18 @@ object Application extends Controller {
     product=pr
     model=mod
     db.collectProductParameters
+    idProduct = db.getIdProduct(pr,mod)
     val productParameters = db.getProductParameters(idProduct)
-    println("productParameters = " +  productParameters.getClass)
-    println("productParameters = " + productParameters)
+    println("productParameters = " + productParameters.mkString)
+
     Ok(views.html.products(product,model,productParameters))
   }
 
   def getPrice(pr: String, mod: String, quantityProduct:Int)= Action{
-    idProduct = db.getIdProduct(pr,mod)
-    println("idProduct = " + idProduct)
     db.collectProduct
     val price= db.getPriceProduct(idProduct)*quantityProduct
     println("price = " + price)
+
     Ok(""+price+"")
   }
 
