@@ -5,7 +5,6 @@ import play.api.mvc._
 
 object Application extends Controller {
   var product=""
-  var model=""
   var idProduct= 0
   val db = new Db()
 
@@ -15,26 +14,22 @@ object Application extends Controller {
   }
 
 
-  def getData(pr: String, mod: String) = Action{
-    println("model = " + mod)
+  def geHardwareProduct(pr: String) = Action{
     println("product = " + pr)
     product=pr
-    model=mod
-    db.collectProductParameters
-    idProduct = db.getIdProduct(pr,mod)
-    val productParameters = db.getProductParameters(idProduct)
-    println("productParameters = " + productParameters.mkString)
+    idProduct = db.getIdProduct(product)
+    val options: Unit = db.getConfigurationOptions(idProduct)
 
-    Ok(views.html.products(product,model,productParameters))
+    Ok(views.html.products())
   }
 
-  def getPrice(pr: String, mod: String, quantityProduct:Int)= Action{
-    db.collectProduct
-    val price= db.getPriceProduct(idProduct)*quantityProduct
-    println("price = " + price)
-
-    Ok(""+price+"")
-  }
+//  def getPrice(pr: String, mod: String, quantityProduct:Int)= Action{
+//    db.collectProduct
+//    val price= db.getPriceProduct(idProduct)*quantityProduct
+//    println("price = " + price)
+//
+//    Ok(""+price+"")
+//  }
 
 
 

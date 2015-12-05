@@ -1,5 +1,4 @@
-@(products: scala.collection.immutable.Map[String,scala.collection.immutable.List[String]])
-
+@(products: scala.collection.immutable.List[String])
 
 <!DOCTYPE html>
 
@@ -36,13 +35,12 @@
 
         }
 
-        function getDataAjax(product,model){
-                 console.log("model=" + model);
+        function geHardwareProductAjax(product){
                  console.log("product=" + product);
 
                  $.ajax({
                      type : 'GET',
-                     url : "/getData?product=" + product +"&model=" + model,
+                     url : "/geHardwareProduct?product=" + product,
                      success : function(data) {
                           removeContent();
                           var div = document.createElement('div');
@@ -70,15 +68,14 @@
             <div id="menu">
                 <form name="form">
                     <div id="textMenu"> Изделия</div>
-                    @for((product, models) <-products) {
+                    @for(product <-products) {
                         <table style="margin-left: 4%">
-                            <tr><th><div id="text">@product</div></th></tr>
+                            <tr><th><div id="text">Список изделий</div></th></tr>
                         <tr><td>
                         <select class="new-select-style-wpandyou select" id="@product"  name="@product">
-                        @for(model <-models) {
-                            <option onclick="getDataAjax(@{"'"+product+"','"+model+"'"})" value="@model"> @model </option>
 
-                        }
+                            <option onclick="geHardwareProductAjax(@product)" value="@product"> @product </option>
+
                         </select></td></tr></table><br/><br/>
                     }
                 </form>
