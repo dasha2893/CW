@@ -36,11 +36,11 @@
         }
 
         function geHardwareProductAjax(product){
-                 console.log("product=" + product);
-
+            console.log("product= " + product);
+            var pr= product.trim().toString();
                  $.ajax({
                      type : 'GET',
-                     url : "/geHardwareProduct?product=" + product,
+                     url : "/geHardwareProduct?pr=" + pr,
                      success : function(data) {
                           removeContent();
                           var div = document.createElement('div');
@@ -67,17 +67,16 @@
             <div id="header"><div id="textHeader">Сборка изделий</div></div>
             <div id="menu">
                 <form name="form">
-                    <div id="textMenu"> Изделия</div>
-                    @for(product <-products) {
+
                         <table style="margin-left: 4%">
                             <tr><th><div id="text">Список изделий</div></th></tr>
                         <tr><td>
-                        <select class="new-select-style-wpandyou select" id="@product"  name="@product">
-
-                            <option onclick="geHardwareProductAjax(@product)" value="@product"> @product </option>
-
+                        <select class="new-select-style-wpandyou select" id="products"  name="products">
+                        @for(product <-products) {
+                            <option onclick="geHardwareProductAjax(@{"'"+product+"'"})" value="@product"> @product </option>
+                        }
                         </select></td></tr></table><br/><br/>
-                    }
+
                 </form>
             </div>
             <div id="content">

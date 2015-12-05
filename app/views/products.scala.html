@@ -1,0 +1,53 @@
+@(results: scala.collection.immutable.Map[String, Stream[(String, Int, String, String, String, String)]])
+
+<div id="otherContent">
+    <style>
+    #t01{
+    margin-top: 2%;
+    margin-left:auto;
+    margin-right:auto;
+    }
+    #t01, #th, #td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    }
+    #th, #td {
+    padding: 5px;
+    text-align: left;
+    }
+    table#t01 tr:nth-child(even) {
+    background-color: #eee;
+    }
+    table#t01 tr:nth-child(odd) {
+    background-color:#fff;
+    }
+    </style>
+    <div id="content2">
+
+            <div id="textMenu"> Комплектующие </div>
+            @for(result <- results) {
+                <div id="text">@result._1</div>
+                <select class="new-select-style-wpandyou select" id="@result._1" name="@result._1">
+                @for(r <- result._2) {
+                    <option value="@r._2"> @{r._3 + " " +  r._4 + " " + r._5 + " " + r._6} </option>
+                }
+                </select>
+            }
+    </div>
+    <div id="content3">
+        <b style="text-align: center;color: #ff1d15;line-height: 1.3; margin-top: 2%;font-size: 18px; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">Количество изделий:</b><br>
+        <input type="text" id="quantity">
+
+        <p><input type="button" value="Собрать""></p>
+        <div id="textPrice" style="
+        margin-top: 20%;
+        color: #ff1d15;
+        line-height: 1.3;
+        margin-top: 2%;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">
+        </div>
+    </div>
+
+</div>
