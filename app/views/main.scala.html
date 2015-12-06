@@ -1,4 +1,4 @@
-@(products: scala.collection.immutable.List[String])
+@(products: scala.collection.immutable.List[(Int, String)])
 
 <!DOCTYPE html>
 
@@ -14,45 +14,85 @@
         <script>
             var idProduct = 0;
             var hardwareIds = new Map();
+            var countOfClicks= 0;
+            var  hardwareId1 = 0;
+            var  hardwareId2 = 0;
+            var  hardwareId3 = 0;
+            var quantityProduct = 1;
+            var array = new Array();
 
         function removeContent(){
-               $("#otherContent").remove();
+               $("#otherContentProducts").remove();
             }
 
+        function getTagsForPrice(){
 
-//        function getPrice(product,model){
-//                 console.log("model="+model);
-//                 var quantityProduct = document.getElementById("quantity").value;
-//                                  console.log("quantityProduct="+quantityProduct);
-//
-//                 $.ajax({
-//                    type: 'GET',
-//                    url: "/getPrice?product=" + product +"&model=" + model + "&quantityProduct=" + quantityProduct,
-//                    success: function(data){
-//                    console.log("data="+data);
-//                    var text ="Изделие(я) собрано(ы).  Стоимость: " + data + " руб.";
-//                    $("#textPrice").html(text);
-//                     },
-//                    error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
-//                 });
-//
-//        }
+                console.log("quantityProduct="+quantityProduct);
+                quantityProduct = 1;
 
-        function geHardwareProductAjax(product){
-            console.log("product= " + product);
-            var pr= product.trim().toString();
+                hardwareIds.forEach(function (item) {
+                    array.push(item);
+                });
+
+                hardwareId1 = array[0];
+                hardwareId2 = array[1];
+                hardwareId3 = array[2];
+
+                console.log("hardwareId1= " + hardwareId1);
+                console.log("hardwareId2= " + hardwareId2);
+                console.log("hardwareId3= " + hardwareId3);
+                console.log("idProduct= " + idProduct);
+
+            $.ajax({
+                type : 'GET',
+                url : "/getPriceProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3 + "&quantityProduct=" + quantityProduct,
+                success : function(data) {
+                        $("#otherContentComposition").remove();
+                        $("#otherContentPrice").remove();
+
+                        var div = document.createElement('div');
+                        div.type = 'text';
+                        div.innerHTML = data;
+                        div.display = 'none';
+                        document.getElementById("price").appendChild(div);
+                    },
+                    error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
+                });
+
+            }
+
+        function getPrice(){
+
+                     quantityProduct = document.getElementById("quantity").value;
+                     console.log("quantityProduct="+quantityProduct);
+
+                     $.ajax({
+                         type: 'GET',
+                         url: "/getPriceProducts?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3 + "&quantityProduct=" + quantityProduct,
+                         success: function(data){
+                             console.log("data="+data);
+                             var text ="Изделие(я) собрано(ы).  Стоимость: " + data + " руб.";
+                             $("#textPrice").html(text);
+                         },
+                         error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
+                     });
+       }
+
+        function geHardwareProductAjax(idProd){
+            idProduct = idProd;
+            console.log("idProduct= " + idProduct);
                  $.ajax({
                      type : 'GET',
-                     url : "/geHardwareProduct?pr=" + pr,
+                     url : "/geHardwareProduct?idProduct=" + idProduct,
                      success : function(data) {
                           removeContent();
                           var div = document.createElement('div');
                           div.type = 'text';
                           div.innerHTML = data;
                           div.display = 'none';
-                          document.getElementById("result").appendChild(div);
+                          document.getElementById("hardware").appendChild(div);
                          },
-                     error : function(data) { alert("something wrong")  }
+                     error : function(data) { alert("Данное изделие не доступно для сборки.")  }
                  });
             }
 
@@ -63,40 +103,49 @@
                 hardwareIds.set(nameHardware,idHardware);
          }
 
-        function getAllCompositionProduct(idProd){
-            idProduct=idProd;
-            console.log("idProduct= " + idProduct);
-            var  hardwareId1 = 0;
-            var  hardwareId2 = 0;
-            var  hardwareId3 = 0;
+        function getCountOfClicks()  {
+            countOfClicks = countOfClicks+1;
+            console.log("countOfClicks= " + countOfClicks);
+        }
 
-            var array = new Array();
+        function getAllCompositionProduct(idProd,countHardware){
+            console.log("countOfClicks= " + countOfClicks);
+            console.log("countHardware= " + countHardware);
 
-            hardwareIds.forEach(function (item) {
-                array.push(item);
-            });
+            if(countOfClicks<(countHardware-3)){
+                alert("Выбраны не все комплектующие!");
 
-            hardwareId1=array[0];
-            hardwareId2=array[1];
-            hardwareId3=array[2];
+                idProduct=idProd;
+                console.log("idProduct= " + idProduct);
+            }
+            else{
+                hardwareIds.forEach(function (item) {
+                    array.push(item);
+                });
 
-            console.log("hardwareId1= " + hardwareId1);
-            console.log("hardwareId2= " + hardwareId2);
-            console.log("hardwareId3= " + hardwareId3);
+                hardwareId1 = array[0];
+                hardwareId2 = array[1];
+                hardwareId3 = array[2];
 
-            $.ajax({
-                type : 'GET',
-                url : "/getAllCompositionProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
-                success : function(data) {
-                    $("#otherContent2").remove();
-                    var div = document.createElement('div');
-                    div.type = 'text';
-                    div.innerHTML = data;
-                    div.display = 'none';
-                    document.getElementById("composition").appendChild(div);
-                },
-                error : function(data) { alert("something wrong")  }
-            });
+                console.log("hardwareId1= " + hardwareId1);
+                console.log("hardwareId2= " + hardwareId2);
+                console.log("hardwareId3= " + hardwareId3);
+
+                $.ajax({
+                    type : 'GET',
+                    url : "/getAllCompositionProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
+                    success : function(data) {
+                        $("#otherContentComposition").remove();
+                        $("#otherContentPrice").remove();
+                        var div = document.createElement('div');
+                        div.type = 'text';
+                        div.innerHTML = data;
+                        div.display = 'none';
+                        document.getElementById("composition").appendChild(div);
+                    },
+                    error : function(data) { alert("Выбраны не все комплектующие!")  }
+                });
+            }
         }
 
 
@@ -114,15 +163,19 @@
 
                         <select style="margin-left: 10%;" class="new-select-style-wpandyou select" id="products"  name="products">
                         @for(product <-products) {
-                            <option onclick="geHardwareProductAjax(@{"'"+product+"'"})" value="@product"> @product </option>
+                            <option onclick="geHardwareProductAjax(@{"'"+product._1+"'"})" value="@product._2"> @product._2 </option>
                         }
                         </select><br/><br/>
 
                 </form>
             </div>
             <div id="content">
-                <div id="result" style="margin-left: 8%"></div>
-                <div id="content3"><div id="composition"></div></div>
+                <div id="hardware" style="margin-left: 8%"></div>
+                <div id="content3">
+                    <div id="composition"></div>
+                    <div id="price"></div>
+                    <div id="text"><div id="textPrice"></div></div>
+                </div>
             </div>
 
         </body>

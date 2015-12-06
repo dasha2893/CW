@@ -13,14 +13,10 @@ class Db {
 
   def getProducts = DB.withConnection { implicit c =>
     println("Идём в базу")
-    val tuples = SQL("select name from product")().map(row => row[String](1)).toList
+    val tuples = SQL("select id_product, name from product")().map(row => (row[Int](1),row[String](2))).toList
     println("tuples = " + tuples)
     tuples
 
-  }
-
-  def getIdProduct(product: String) = DB.withConnection { implicit c =>
-    SQL(s"select id_product from product where name = '$product'")().map(row => row[Int](1)).head
   }
 
   def getConfigurationOptions(idProduct: Int) = DB.withConnection { implicit c =>
@@ -41,5 +37,9 @@ class Db {
     map(tuple => (tuple._1,tuple._2.map(t => (t._1,t._2,t._3.replace("unknown",t._1) ))))
   }
 
+  def getPriceProduct(idProduct: Int, idHardware1: Int, idHardware2: Int, idHardware3: Int) = DB.withConnection { implicit c =>
+    val price = SQL( s"""SELECT * from cost_product ('$idProduct','$idHardware1','$idHardware2','$idHardware3')""")().map(row => row[Double](1)).head
+    price
+  }
 
 }

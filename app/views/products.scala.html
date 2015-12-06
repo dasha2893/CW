@@ -1,6 +1,6 @@
-@(results: scala.collection.immutable.Map[String, Stream[(String, Int, String, String, String, String)]],idProduct: Int)
+@(results: scala.collection.immutable.Map[String, Stream[(String, Int, String, String, String, String)]],idProduct: Int , countHardware:Int)
 
-<div id="otherContent">
+<div id="otherContentProducts">
     <style>
     table {
     border: 1px solid #ddd;
@@ -24,12 +24,13 @@
                     <tr >
                         <td ><div id="text">@result._1</div></td>
                         <td ><select class="new-select-style-wpandyou select" id="@result._1" name="@result._1">
+                            <option selected value="1"> Пожалуйста,выберите модель </option>
                         @for(r <- result._2) {
                             @if(result._2.size > 1) {
                                 <option onclick="getIdHardware(@{"'"+r._2+"','"+r._1+"'"})" value="@r._2"> @{r._3 + " " + r._4 + " " + r._5 + " " + r._6} </option>
                             }
                             @if(result._2.size == 1){
-                              <option value="@r._2"> @{r._3 + " " + r._4 + " " + r._5 + " " + r._6} </option>
+                              <option onclick="getCountOfClicks()" value="@r._2"> @{r._3 + " " + r._4 + " " + r._5 + " " + r._6} </option>
                             }
 
                         }
@@ -37,8 +38,8 @@
                     </tr>
                 }
             </table>
-        <p style="margin-left: 6%"><input type="button" class="button_example" href="#" value="Показать полный состав изделия" onclick="getAllCompositionProduct(@{"'"+idProduct+"'"})"></p>
-
+        <p style="margin-left: 6%"><input type="button" class="button_example" href="#" value="Показать полный состав изделия" onclick="getAllCompositionProduct(@{"'"+idProduct+"','"+countHardware+"'"})"></p>
+        <p style="margin-left: 6%"><input type="button" class="button_example"  value="Цена изделия" onclick="getTagsForPrice()"></p>
     </div>
 
 </div>
