@@ -12,28 +12,31 @@
 
 
         <script>
+            var idProduct = 0;
+            var hardwareIds = new Map();
+
         function removeContent(){
                $("#otherContent").remove();
             }
 
 
-        function getPrice(product,model){
-                 console.log("model="+model);
-                 var quantityProduct = document.getElementById("quantity").value;
-                                  console.log("quantityProduct="+quantityProduct);
-
-                 $.ajax({
-                    type: 'GET',
-                    url: "/getPrice?product=" + product +"&model=" + model + "&quantityProduct=" + quantityProduct,
-                    success: function(data){
-                    console.log("data="+data);
-                    var text ="Изделие(я) собрано(ы).  Стоимость: " + data + " руб.";
-                    $("#textPrice").html(text);
-                     },
-                    error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
-                 });
-
-        }
+//        function getPrice(product,model){
+//                 console.log("model="+model);
+//                 var quantityProduct = document.getElementById("quantity").value;
+//                                  console.log("quantityProduct="+quantityProduct);
+//
+//                 $.ajax({
+//                    type: 'GET',
+//                    url: "/getPrice?product=" + product +"&model=" + model + "&quantityProduct=" + quantityProduct,
+//                    success: function(data){
+//                    console.log("data="+data);
+//                    var text ="Изделие(я) собрано(ы).  Стоимость: " + data + " руб.";
+//                    $("#textPrice").html(text);
+//                     },
+//                    error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
+//                 });
+//
+//        }
 
         function geHardwareProductAjax(product){
             console.log("product= " + product);
@@ -48,17 +51,56 @@
                           div.innerHTML = data;
                           div.display = 'none';
                           document.getElementById("result").appendChild(div);
-
                          },
                      error : function(data) { alert("something wrong")  }
                  });
             }
 
-        function getDataFromSelect(product,model){
-            console.log(product);
-            console.log(model);
-            getDataAjax(product,model)
+        function getIdHardware(idHardware,nameHardware){
+            if(hardwareIds.has(nameHardware)){
+                hardwareIds.delete(nameHardware);
+            }
+                hardwareIds.set(nameHardware,idHardware);
+         }
+
+        function getAllCompositionProduct(idProd){
+            idProduct=idProd;
+            console.log("idProduct= " + idProduct);
+            var  hardwareId1 = 0;
+            var  hardwareId2 = 0;
+            var  hardwareId3 = 0;
+
+            var array = new Array();
+
+            hardwareIds.forEach(function (item) {
+                array.push(item);
+            });
+
+            hardwareId1=array[0];
+            hardwareId2=array[1];
+            hardwareId3=array[2];
+
+            console.log("hardwareId1= " + hardwareId1);
+            console.log("hardwareId2= " + hardwareId2);
+            console.log("hardwareId3= " + hardwareId3);
+
+            $.ajax({
+                type : 'GET',
+                url : "/getAllCompositionProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
+                success : function(data) {
+                    $("#otherContent2").remove();
+                    var div = document.createElement('div');
+                    div.type = 'text';
+                    div.innerHTML = data;
+                    div.display = 'none';
+                    document.getElementById("composition").appendChild(div);
+                },
+                error : function(data) { alert("something wrong")  }
+            });
         }
+
+
+
 
 
 </script>
@@ -68,19 +110,19 @@
             <div id="menu">
                 <form name="form">
 
-                        <table style="margin-left: 4%">
-                            <tr><th><div id="text">Список изделий</div></th></tr>
-                        <tr><td>
-                        <select class="new-select-style-wpandyou select" id="products"  name="products">
+                        <div id="textMenu0">Список изделий</div>
+
+                        <select style="margin-left: 10%;" class="new-select-style-wpandyou select" id="products"  name="products">
                         @for(product <-products) {
                             <option onclick="geHardwareProductAjax(@{"'"+product+"'"})" value="@product"> @product </option>
                         }
-                        </select></td></tr></table><br/><br/>
+                        </select><br/><br/>
 
                 </form>
             </div>
             <div id="content">
                 <div id="result" style="margin-left: 8%"></div>
+                <div id="content3"><div id="composition"></div></div>
             </div>
 
         </body>

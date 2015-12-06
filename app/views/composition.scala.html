@@ -1,0 +1,34 @@
+@(listComponentProduct: Map[String, Stream[(String, Int, String)]])
+
+<div id="otherContent2">
+    <style>
+    table {
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+    }
+    tr:nth-child(even){background-color: #f2f2f2}
+    </style>
+
+
+        <div id="textMenu"> Состав изделия </div>
+        <table >
+            @for(componentProduct <- listComponentProduct){
+                @if(componentProduct._1 != "unknown"){
+                    <tr ><td  COLSPAN=2><div id="text2">@componentProduct._1</div></td><tr>
+                }
+                <tr ><td ><div id="text">Название комплектующего</div></td><td ><div id="text">Количество</div></td></tr>
+                @for(hardware <- componentProduct._2){
+                 <tr ><td >@hardware._1</td><td >@hardware._2</td></tr>
+                }
+            }
+        </table>
+
+
+</div>

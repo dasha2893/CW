@@ -31,18 +31,15 @@ class Db {
        map(tuple => (tuple._1,tuple._2.map(t => (t._1, t._2, t._3, t._4.replace("unknown",""),t._5.replace("-9999.0",""),t._6.replace("unknown","")))))
   }
 
-//
-//  def getPriceProduct (id:Int) = DB.withConnection { implicit c =>
-//    SQL(s"  select * from build_product($id)")().map(row => row[Double](1)).head
-//  }
-//
-//  def getProductParameters(idProduct:Int) = DB.withConnection { implicit c =>
-//    println("idProduct = " + idProduct)
-//    val list = SQL(s"SELECT * from build_product_parameters('$idProduct')")().map(row => (row[String](1), row[String](2), row[String](3), row[String](4))).toList
-//    list.foreach(println)
-//    list
-//
-//  }
+  def getListComponentProduct(idProduct: Int, idHardware1: Int, idHardware2: Int, idHardware3: Int) = DB.withConnection { implicit c =>
+    SQL(s"""select bp.name_hardware, bp.amount, coalesce(b.name_hardware,'unknown')
+          from build_product_variant_ispolneniya('$idProduct','$idHardware1','$idHardware2','$idHardware3') as bp
+          left join build_product_variant_ispolneniya('$idProduct','$idHardware1','$idHardware2','$idHardware3') as b
+          on bp.id_par=b.id_var_hw
+          where bp.name_hardware != b.name_hardware or bp.id_par ISNULL""")().map(row => (row[String](1),row[Int](2),row[String](3))).
+    groupBy(_._3).
+    map(tuple => (tuple._1,tuple._2.map(t => (t._1,t._2,t._3.replace("unknown",t._1) ))))
+  }
 
 
 }

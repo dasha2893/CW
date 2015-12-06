@@ -4,9 +4,8 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /geHardwareProduct          controllers.Application.geHardwareProduct(pr: String)
-
-
+GET     /geHardwareProduct          controllers.Application.getHardwareProduct(pr: String)
+GET     /getAllCompositionProduct   controllers.Application.getAllCompositionProduct(idProduct: Int, hardwareId1: Int,hardwareId2: Int,hardwareId3: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

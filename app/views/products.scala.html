@@ -1,53 +1,44 @@
-@(results: scala.collection.immutable.Map[String, Stream[(String, Int, String, String, String, String)]])
+@(results: scala.collection.immutable.Map[String, Stream[(String, Int, String, String, String, String)]],idProduct: Int)
 
 <div id="otherContent">
     <style>
-    #t01{
-    margin-top: 2%;
-    margin-left:auto;
-    margin-right:auto;
-    }
-    #t01, #th, #td {
-    border: 1px solid black;
+    table {
+    border: 1px solid #ddd;
     border-collapse: collapse;
+    width: 100%;
     }
-    #th, #td {
-    padding: 5px;
+
+    th, td {
+    border: 1px solid #ddd;
     text-align: left;
+    padding: 8px;
     }
-    table#t01 tr:nth-child(even) {
-    background-color: #eee;
-    }
-    table#t01 tr:nth-child(odd) {
-    background-color:#fff;
-    }
+
+    tr:nth-child(even){background-color: #f2f2f2}
     </style>
     <div id="content2">
 
             <div id="textMenu"> Комплектующие </div>
-            @for(result <- results) {
-                <div id="text">@result._1</div>
-                <select class="new-select-style-wpandyou select" id="@result._1" name="@result._1">
-                @for(r <- result._2) {
-                    <option value="@r._2"> @{r._3 + " " +  r._4 + " " + r._5 + " " + r._6} </option>
-                }
-                </select>
-            }
-    </div>
-    <div id="content3">
-        <b style="text-align: center;color: #ff1d15;line-height: 1.3; margin-top: 2%;font-size: 18px; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">Количество изделий:</b><br>
-        <input type="text" id="quantity">
+            <table >
+                @for(result <- results) {
+                    <tr >
+                        <td ><div id="text">@result._1</div></td>
+                        <td ><select class="new-select-style-wpandyou select" id="@result._1" name="@result._1">
+                        @for(r <- result._2) {
+                            @if(result._2.size > 1) {
+                                <option onclick="getIdHardware(@{"'"+r._2+"','"+r._1+"'"})" value="@r._2"> @{r._3 + " " + r._4 + " " + r._5 + " " + r._6} </option>
+                            }
+                            @if(result._2.size == 1){
+                              <option value="@r._2"> @{r._3 + " " + r._4 + " " + r._5 + " " + r._6} </option>
+                            }
 
-        <p><input type="button" value="Собрать""></p>
-        <div id="textPrice" style="
-        margin-top: 20%;
-        color: #ff1d15;
-        line-height: 1.3;
-        margin-top: 2%;
-        font-size: 18px;
-        font-weight: bold;
-        font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">
-        </div>
+                        }
+                        </select></td>
+                    </tr>
+                }
+            </table>
+        <p style="margin-left: 6%"><input type="button" class="button_example" href="#" value="Показать полный состав изделия" onclick="getAllCompositionProduct(@{"'"+idProduct+"'"})"></p>
+
     </div>
 
 </div>
