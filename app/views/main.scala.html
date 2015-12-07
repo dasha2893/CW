@@ -27,7 +27,10 @@
             }
 
         function getTagsForPrice(){
-
+            if(default1 == 'Пожалуйста,выберите модель'){
+                alert("Выбраны не все комплектующие!");
+            }
+            else{
                 console.log("quantityProduct="+quantityProduct);
                 quantityProduct = 1;
 
@@ -44,10 +47,10 @@
                 console.log("hardwareId3= " + hardwareId3);
                 console.log("idProduct= " + idProduct);
 
-            $.ajax({
-                type : 'GET',
-                url : "/getPriceProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3 + "&quantityProduct=" + quantityProduct,
-                success : function(data) {
+                $.ajax({
+                    type : 'GET',
+                    url : "/getPriceProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3 + "&quantityProduct=" + quantityProduct,
+                    success : function(data) {
                         $("#otherContentPrice").remove();
                         $("#otherContentComposition").remove();
                         $("#otherContentConsumptionMaterials").remove();
@@ -63,6 +66,8 @@
                     },
                     error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
                 });
+            }
+
 
             }
 
@@ -125,17 +130,62 @@
         function getCountOfClicks()  {
             countOfClicks = countOfClicks+1;
             console.log("countOfClicks= " + countOfClicks);
+            default1 = "";
         }
 
         function getAllCompositionProduct(idProd,countHardware){
             console.log("countOfClicks= " + countOfClicks);
             console.log("countHardware= " + countHardware);
-
-            if(countOfClicks<(countHardware-3)){
+            if(default1 == 'Пожалуйста,выберите модель'){
                 alert("Выбраны не все комплектующие!");
+            }
+            else{
+                if(countOfClicks<(countHardware-3)){
+                    alert("Выбраны не все комплектующие!");
 
-                idProduct=idProd;
-                console.log("idProduct= " + idProduct);
+                    idProduct=idProd;
+                    console.log("idProduct= " + idProduct);
+                }
+                else{
+                    hardwareIds.forEach(function (item) {
+                        array.push(item);
+                    });
+
+                    hardwareId1 = array[0];
+                    hardwareId2 = array[1];
+                    hardwareId3 = array[2];
+
+                    console.log("hardwareId1= " + hardwareId1);
+                    console.log("hardwareId2= " + hardwareId2);
+                    console.log("hardwareId3= " + hardwareId3);
+
+                    $.ajax({
+                        type : 'GET',
+                        url : "/getAllCompositionProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
+                        success : function(data) {
+                            $("#otherContentComposition").remove();
+                            $("#otherContentPrice").remove();
+                            $("#otherContentConsumptionMaterials").remove();
+
+                            var textPrice =" ";
+                            $("#textPrice").html(textPrice);
+
+                            var div = document.createElement('div');
+                            div.type = 'text';
+                            div.innerHTML = data;
+                            div.display = 'none';
+                            document.getElementById("composition").appendChild(div);
+                        },
+                        error : function(data) { alert("Выбраны не все комплектующие!")  }
+                    });
+                }
+            }
+
+        }
+
+        function getConsumptionMaterials(){
+            if(default1 == 'Пожалуйста,выберите модель'){
+                alert("Выбраны не все комплектующие!");
             }
             else{
                 hardwareIds.forEach(function (item) {
@@ -149,15 +199,15 @@
                 console.log("hardwareId1= " + hardwareId1);
                 console.log("hardwareId2= " + hardwareId2);
                 console.log("hardwareId3= " + hardwareId3);
+                console.log("idProduct= " + idProduct);
 
                 $.ajax({
                     type : 'GET',
-                    url : "/getAllCompositionProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
+                    url : "/getConsumptionMaterialsForProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
                     success : function(data) {
                         $("#otherContentComposition").remove();
-                        $("#otherContentPrice").remove();
                         $("#otherContentConsumptionMaterials").remove();
-
+                        $("#otherContentPrice").remove();
                         var textPrice =" ";
                         $("#textPrice").html(textPrice);
 
@@ -165,46 +215,12 @@
                         div.type = 'text';
                         div.innerHTML = data;
                         div.display = 'none';
-                        document.getElementById("composition").appendChild(div);
+                        document.getElementById("consumptionMaterials").appendChild(div);
                     },
                     error : function(data) { alert("Выбраны не все комплектующие!")  }
                 });
             }
-        }
 
-        function getConsumptionMaterials(){
-
-            hardwareIds.forEach(function (item) {
-                array.push(item);
-            });
-
-            hardwareId1 = array[0];
-            hardwareId2 = array[1];
-            hardwareId3 = array[2];
-
-            console.log("hardwareId1= " + hardwareId1);
-            console.log("hardwareId2= " + hardwareId2);
-            console.log("hardwareId3= " + hardwareId3);
-            console.log("idProduct= " + idProduct);
-
-            $.ajax({
-                type : 'GET',
-                url : "/getConsumptionMaterialsForProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
-                success : function(data) {
-                    $("#otherContentComposition").remove();
-                    $("#otherContentConsumptionMaterials").remove();
-                    $("#otherContentPrice").remove();
-                    var textPrice =" ";
-                    $("#textPrice").html(textPrice);
-
-                    var div = document.createElement('div');
-                    div.type = 'text';
-                    div.innerHTML = data;
-                    div.display = 'none';
-                    document.getElementById("consumptionMaterials").appendChild(div);
-                },
-                error : function(data) { alert("Выбраны не все комплектующие!")  }
-            });
 
         }
 
