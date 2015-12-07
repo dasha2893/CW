@@ -20,6 +20,7 @@
             var  hardwareId3 = 0;
             var quantityProduct = 1;
             var array = new Array();
+            var default1  = "";
 
         function removeContent(){
                $("#otherContentProducts").remove();
@@ -56,6 +57,9 @@
                         div.innerHTML = data;
                         div.display = 'none';
                         document.getElementById("price").appendChild(div);
+
+                        var textPrice =" ";
+                        $("#textPrice").html(textPrice);
                     },
                     error : function(data) { alert("Ошибка! Попробуйте ещё раз.")  }
                 });
@@ -98,9 +102,24 @@
             }
 
         function getIdHardware(idHardware,nameHardware){
-            console.log("idHardware= " + idHardware + "   nameHardware= " + nameHardware);
-            hardwareIds.set(nameHardware,idHardware);
-            array.length = 0;
+            if(idHardware=='Пожалуйста,выберите модель'){
+                default1 = idHardware;
+                alert('Выбраны не все комплектующие!');
+                $("#otherContentComposition").remove();
+                $("#otherContentPrice").remove();
+                $("#otherContentConsumptionMaterials").remove();
+
+                var textPrice =" ";
+                $("#textPrice").html(textPrice);
+
+            }
+            else{
+                default1 = "";
+                console.log("idHardware= " + idHardware + "   nameHardware= " + nameHardware);
+                hardwareIds.set(nameHardware,idHardware);
+                array.length = 0;
+            }
+
          }
 
         function getCountOfClicks()  {

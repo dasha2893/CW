@@ -24,7 +24,7 @@
                     <tr >
                         <td ><div id="text">@result._1</div></td>
                         <td ><select class="new-select-style-wpandyou select" id="@result._1" name="@result._1">
-                            <option selected value="1"> Пожалуйста,выберите модель </option>
+                            <option selected onclick="getIdHardware('Пожалуйста,выберите модель')" value="Пожалуйста,выберите модель"> Пожалуйста,выберите модель </option>
                         @for(r <- result._2) {
                             @if(result._2.size > 1) {
                                 <option onclick="getIdHardware(@{"'"+r._2+"','"+r._1+"'"})" value="@r._2"> @{r._3 + " " + r._4 + " " + r._5 + " " + r._6} </option>
