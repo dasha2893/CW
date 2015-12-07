@@ -30,7 +30,7 @@ object Application extends Controller {
     println(hardwareId1)
     println(hardwareId2)
     println(hardwareId3)
-    val listComponentProduct = db.getListComponentProduct(idProduct, hardwareId1,hardwareId2,hardwareId3)
+    val listComponentProduct: Map[String, Stream[(String, Int, String, Double)]] = db.getListComponentProduct(idProduct, hardwareId1,hardwareId2,hardwareId3)
     Ok(views.html.composition(listComponentProduct))
   }
 
@@ -61,6 +61,16 @@ object Application extends Controller {
     Ok(""+priceFormatted+"")
   }
 
+  def getConsumptionMaterialsForProduct(idProduct: Int, hardwareId1: Int, hardwareId2: Int, hardwareId3: Int)= Action{
+    println("вошли в getConsumptionMaterialsForProduct")
+    println(idProduct)
+    println(hardwareId1)
+    println(hardwareId2)
+    println(hardwareId3)
+    val materials = db.getConsumptionMaterials(idProduct,hardwareId1,hardwareId2,hardwareId3)
+
+    Ok(views.html.consumptionMaterials(materials))
+  }
 
 
 }

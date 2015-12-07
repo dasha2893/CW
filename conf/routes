@@ -8,6 +8,7 @@ GET     /geHardwareProduct          controllers.Application.getHardwareProduct(i
 GET     /getAllCompositionProduct   controllers.Application.getAllCompositionProduct(idProduct: Int, hardwareId1: Int,hardwareId2: Int,hardwareId3: Int)
 GET     /getPriceProduct            controllers.Application.getPriceProduct(idProduct: Int, hardwareId1: Int, hardwareId2: Int, hardwareId3: Int, quantityProduct: Int)
 GET     /getPriceProducts           controllers.Application.getPriceProducts(idProduct: Int, hardwareId1: Int, hardwareId2: Int, hardwareId3: Int, quantityProduct: Int)
+GET     /getConsumptionMaterialsForProduct     controllers.Application.getConsumptionMaterialsForProduct(idProduct: Int, hardwareId1: Int, hardwareId2: Int, hardwareId3: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -1,4 +1,4 @@
-@(listComponentProduct: Map[String, Stream[(String, Int, String)]])
+@(listComponentProduct: Map[String, Stream[(String, Int, String, Double)]])
 
 <div id="otherContentComposition">
     <style>
@@ -21,11 +21,16 @@
         <table >
             @for(componentProduct <- listComponentProduct){
                 @if(componentProduct._1 != "unknown"){
-                    <tr ><td  COLSPAN=2><div id="text2">@componentProduct._1</div></td><tr>
+                    <tr ><td  COLSPAN=3><div id="text2">@componentProduct._1</div></td><tr>
                 }
-                <tr ><td ><div id="text">Название комплектующего</div></td><td ><div id="text">Количество</div></td></tr>
+                <tr ><td ><div id="text">Название комплектующего</div></td><td ><div id="text">Количество</div></td><td ><div id="text">Цена (руб.)</div></td></tr>
                 @for(hardware <- componentProduct._2){
-                 <tr ><td >@hardware._1</td><td >@hardware._2</td></tr>
+                    @if(hardware._4==0.0){
+                        <tr ><td >@hardware._1</td><td >@hardware._2</td><td > </td></tr>
+                    }
+                    @if(hardware._4!=0.0){
+                        <tr ><td >@hardware._1</td><td >@hardware._2</td><td >@hardware._4</td></tr>
+                    }
                 }
             }
         </table>

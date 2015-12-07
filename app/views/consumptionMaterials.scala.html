@@ -1,0 +1,14 @@
+@(materials: List[(Int, String, Double, String)])
+
+<div id="otherContentConsumptionMaterials">
+    <div id="textMenu">Расход материлов на производимые комплектующие для изделия</div>
+    <table>
+        <tr>
+            <th><div id="text">Материал</div></th>
+            <th><div id="text">Количество</div></th>
+        </tr>
+        @for(material <- materials){
+            <tr><td>@material._2</td><td>@{material._3 +" "+ material._4}</td></tr>
+        }
+    </table>
+</div>

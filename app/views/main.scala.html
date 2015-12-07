@@ -47,8 +47,9 @@
                 type : 'GET',
                 url : "/getPriceProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3 + "&quantityProduct=" + quantityProduct,
                 success : function(data) {
-                        $("#otherContentComposition").remove();
                         $("#otherContentPrice").remove();
+                        $("#otherContentComposition").remove();
+                        $("#otherContentConsumptionMaterials").remove();
 
                         var div = document.createElement('div');
                         div.type = 'text';
@@ -97,10 +98,9 @@
             }
 
         function getIdHardware(idHardware,nameHardware){
-            if(hardwareIds.has(nameHardware)){
-                hardwareIds.delete(nameHardware);
-            }
-                hardwareIds.set(nameHardware,idHardware);
+            console.log("idHardware= " + idHardware + "   nameHardware= " + nameHardware);
+            hardwareIds.set(nameHardware,idHardware);
+            array.length = 0;
          }
 
         function getCountOfClicks()  {
@@ -137,6 +137,11 @@
                     success : function(data) {
                         $("#otherContentComposition").remove();
                         $("#otherContentPrice").remove();
+                        $("#otherContentConsumptionMaterials").remove();
+
+                        var textPrice =" ";
+                        $("#textPrice").html(textPrice);
+
                         var div = document.createElement('div');
                         div.type = 'text';
                         div.innerHTML = data;
@@ -148,7 +153,41 @@
             }
         }
 
+        function getConsumptionMaterials(){
 
+            hardwareIds.forEach(function (item) {
+                array.push(item);
+            });
+
+            hardwareId1 = array[0];
+            hardwareId2 = array[1];
+            hardwareId3 = array[2];
+
+            console.log("hardwareId1= " + hardwareId1);
+            console.log("hardwareId2= " + hardwareId2);
+            console.log("hardwareId3= " + hardwareId3);
+            console.log("idProduct= " + idProduct);
+
+            $.ajax({
+                type : 'GET',
+                url : "/getConsumptionMaterialsForProduct?idProduct=" + idProduct +"&hardwareId1=" + hardwareId1 +"&hardwareId2=" + hardwareId2 +"&hardwareId3=" + hardwareId3,
+                success : function(data) {
+                    $("#otherContentComposition").remove();
+                    $("#otherContentConsumptionMaterials").remove();
+                    $("#otherContentPrice").remove();
+                    var textPrice =" ";
+                    $("#textPrice").html(textPrice);
+
+                    var div = document.createElement('div');
+                    div.type = 'text';
+                    div.innerHTML = data;
+                    div.display = 'none';
+                    document.getElementById("consumptionMaterials").appendChild(div);
+                },
+                error : function(data) { alert("Выбраны не все комплектующие!")  }
+            });
+
+        }
 
 
 
@@ -174,6 +213,7 @@
                 <div id="content3">
                     <div id="composition"></div>
                     <div id="price"></div>
+                    <div id="consumptionMaterials"></div>
                     <div id="text"><div id="textPrice"></div></div>
                 </div>
             </div>
